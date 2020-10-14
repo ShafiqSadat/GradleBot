@@ -12,7 +12,7 @@ public class MyFirstBot extends TelegramLongPollingBot {
             String text = update.getMessage().getText();
             SendMessage sendMessage = new SendMessage()
                     .setChatId(update.getMessage().getChatId())
-                    .setText("Your text is : "+text)
+                    .setText("Your text is : "+text+" and a test for update")
                     .setReplyToMessageId(update.getMessage().getMessageId());
             try {
                 execute(sendMessage);
