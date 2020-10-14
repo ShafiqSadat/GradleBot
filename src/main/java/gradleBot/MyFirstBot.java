@@ -14,7 +14,13 @@ public class MyFirstBot extends TelegramLongPollingBot {
                     .setChatId(update.getMessage().getChatId())
                     .setText("Your text is : "+text+" and a test for update and ...")
                     .setReplyToMessageId(update.getMessage().getMessageId());
+            DBConnection.createDB();
+            DBConnection.insertWord(text,"YEP");
+            String text1 = DBConnection.resp(text);
             try {
+                execute(new SendMessage()
+                        .setChatId(update.getMessage().getChatId())
+                        .setText("From DB" + text1));
                 execute(sendMessage);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
