@@ -12,10 +12,14 @@ public class MyFirstBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
+            var messageText = update.getMessage().getText();
             var chatID = update.getMessage().getChatId();
             var fromID = update.getMessage().getFrom().getId();
             var messageID = update.getMessage().getMessageId();
+            if (messageText.equals("/start")){
+                DBConnection.createDB();
+                sendMessage("Done DB Created!!",chatID,messageID);
+            }
             if (messageText.equals("create")){
                 DBConnection.createDB();
                 sendMessage("Done DB Created!!",chatID,messageID);
