@@ -1,30 +1,46 @@
 package gradleBot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
+
 public class MyFirstBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()){
-            String text = update.getMessage().getText();
-            SendMessage sendMessage = new SendMessage()
-                    .setChatId(update.getMessage().getChatId())
-                    .setText("Your text is : "+text+" and a test for update and ...")
-                    .setReplyToMessageId(update.getMessage().getMessageId());
-            DBConnection.createDB();
-            DBConnection.insertWord(text,"YEP");
-            String text1 = DBConnection.resp(text);
-            try {
-                execute(new SendMessage()
-                        .setChatId(update.getMessage().getChatId())
-                        .setText("From DB" + text1));
-                execute(sendMessage);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            String messageText = update.getMessage().getText();
+            var chatID = update.getMessage().getChatId();
+            var fromID = update.getMessage().getFrom().getId();
+            if (messageText.equals("send")){
+                sendFile(chatID,"Your DB");
             }
+        }
+    }
+
+    private void sendMessage(String messageText, long userID, int messageID) {
+        SendMessage sendMessage = new SendMessage()
+                .setText(messageText)
+                .setChatId(userID)
+                .setReplyToMessageId(messageID);
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+    private void sendFile(long chatID,String caption){
+        SendDocument sendDocument = new SendDocument()
+                .setDocument(new File("./database.shafiq"))
+                .setChatId(chatID)
+                .setCaption(caption);
+        try {
+            execute(sendDocument);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
