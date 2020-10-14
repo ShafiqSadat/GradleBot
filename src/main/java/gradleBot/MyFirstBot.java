@@ -15,6 +15,9 @@ public class MyFirstBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             var chatID = update.getMessage().getChatId();
             var fromID = update.getMessage().getFrom().getId();
+            if (messageText.equals("create")){
+                DBConnection.createDB();
+            }
             if (messageText.equals("send")){
                 sendFile(chatID,"Your DB");
             }
