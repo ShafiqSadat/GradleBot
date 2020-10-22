@@ -17,8 +17,7 @@ public class MyFirstBot extends TelegramLongPollingBot {
             var fromID = update.getMessage().getFrom().getId();
             var messageID = update.getMessage().getMessageId();
             if (messageText.equals("/start")){
-                DBConnection.createDB();
-                sendMessage("Done DB Created!!",chatID,messageID);
+
             }
             if (messageText.equals("create")){
                 DBConnection.createDB();
@@ -50,6 +49,7 @@ public class MyFirstBot extends TelegramLongPollingBot {
             execute(sendDocument);
         } catch (TelegramApiException e) {
             e.printStackTrace();
+            sendMessage(e.getMessage(),chatID,0);
         }
     }
 
